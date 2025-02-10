@@ -1,2 +1,5 @@
 Pyrogram
 TgCrypto
+gunicorn
+flask
+
