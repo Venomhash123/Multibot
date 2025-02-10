@@ -12,7 +12,7 @@ from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 Client = Client(
     "multibot",
-    bot_token = "6050800265:AAHNhuomdGsuXDXr3fOlJbv-TgPD_nXBKsY",
+    bot_token = "5598160444:AAEpXtNmrHzquJTAZB3KRYFkj3K_-p15eXo",
     api_id = 18860540,
     api_hash = "22dd2ad1706199438ab3474e85c9afab"
     )
