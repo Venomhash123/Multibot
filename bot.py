@@ -172,16 +172,16 @@ async def batch(bot,update):
         for i in range(FROM_MSG_ID-1 ,len(total_messages), 200):
             channel_posts = AsyncIter(await bot.get_messages(int(f'-100{FROM_CHANNEL}'), total_messages[i:i+200]))
             async for message in channel_posts:
-                msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
-                try:
+                #msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
+                # try:
                     
-                    await txt.edit(msg)
-                except FloodWait as e:
-                    await asyncio.sleep(e.value)
-                    await txt.edit(msg)
+                #     await txt.edit(msg)
+                # except FloodWait as e:
+                #     await asyncio.sleep(e.value)
+                #     await txt.edit(msg)
                     
-                except Exception as e:
-                    return await bot.send_message(update.from_user.id,f"problem\n{e}")
+                # except Exception as e:
+                #     return await bot.send_message(update.from_user.id,f"problem\n{e}")
                     
                     
                 message_ids = []
@@ -388,9 +388,17 @@ async def batch(bot,update):
                     unknown_msg_type['total_msg']+1
                     unknown_msg_type['msg_ids'].append(message.id)
                     continue
-                # if total % 2 ==0:
-                #     msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
-                #     await txt.edit(msg)
+                if total % 5 ==0:
+                    msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
+                    try:
+                        await txt.edit(msg)
+                    except FloodWait as e:
+                        await asyncio.sleep(e.value)
+                        await txt.edit(msg)
+                    
+                    except Exception as e:
+                        return await bot.send_message(update.from_user.id,f"problem editing txt while totaling\n{e}")
+                
     
     
     except Exception as e:
@@ -401,7 +409,7 @@ async def batch(bot,update):
         end_time = datetime.datetime.now()
         t = end_time - start_time
         time_taken = str(datetime.timedelta(seconds=t.seconds))
-        msg = f"batch editing in complete!\nTime taken : {time_taken}\n\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
+        msg = f"batch editing is complete!\nTime taken : {time_taken}\n\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
         await txt.edit(msg)
 
 
