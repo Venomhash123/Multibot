@@ -266,10 +266,10 @@ async def batch(bot,update):
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
                                     
                                 try:
-                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                                 except FloodWait as e:
                                     await asyncio.sleep(e.value)
-                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             
@@ -280,7 +280,7 @@ async def batch(bot,update):
                                     count=0
                                 await txt.edit("sending caption with photo to photo channel")
                                 thumb_path = await bot.download_media(thumb_id)
-                                media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
+                                media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
@@ -351,10 +351,10 @@ async def batch(bot,update):
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#BaTCh_LInK|{' '.join(str(x) for x in message_ids)}")
                             
                                 try:
-                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                                 except FloodWait as e:
                                     await asyncio.sleep(e.value)
-                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             try:
@@ -366,7 +366,7 @@ async def batch(bot,update):
                                 if not thumb_id:
                                     thumb_id = default_thumbs
                                 thumb_path = await bot.download_media(thumb_id)
-                                media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
+                                media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
