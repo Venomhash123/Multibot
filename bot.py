@@ -113,7 +113,7 @@ async def raw(bot,update):
     if not update.reply_to_message:
         return await update.reply_text("reply any message to get raw detail of that")
     try:
-        await update.reply_text(f'{str(print(update))}')
+        print(update)
     except Exception as e:
         await update.reply_text(e)
 
