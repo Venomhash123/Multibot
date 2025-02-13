@@ -285,6 +285,7 @@ async def batch(bot,update):
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
                                 await bot.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                thumb_id=""
                                 success+=1
                                 count+=1
                             except Exception as e:
@@ -372,6 +373,7 @@ async def batch(bot,update):
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
                                 await bot.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                thumb_id=""
                                 success+=1
                                 count+=1
                             except Exception as e:
