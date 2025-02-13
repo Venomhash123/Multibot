@@ -164,7 +164,7 @@ async def batch(bot,update):
         empty = 0
         total_messages = (range(1,TO_MSG_ID))
         thumb_id = ""
-        default_thumbs = "AgACAgUAAxkBAAECBAJk3lsSOkQFWFZ_x3O8ApD8MjuOaAACGrcxG-6L6VYRRHsls-7JkwAIAQADAgADeAAHHgQ"
+        default_thumbs = "AgACAgEAAxkBAAMdZ61UvEL1el8goDjtZPrPo0OC8zsAAk2wMRsoQnFFuDpuOm0RYgsACAEAAwIAA3MABx4E"
         
         add_detail = ""
         
