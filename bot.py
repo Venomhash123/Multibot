@@ -114,17 +114,14 @@ async def raw(bot,update):
         return await update.reply_text("reply any message to get raw detail of that")
     try:
         await update.reply_text(update.Message)
-
-
-
-
-
+    except Exception as e:
+        await update.reply_text(e)
 
 @Client.on_message(filters.private & filters.command("batch"))
 async def batch(bot,update):
     if not update.reply_to_message:
         return await update.reply_text("reply to formate like --- from_channel_id(without-100)|photo_send_channel(with -100)|start_msg_id|to_msg_id")
-    
+
     try:
         FROM_CHANNEL = int(update.reply_to_message.text.split("|")[0])
     except ValueError:
