@@ -11,7 +11,7 @@ from pyrogram import Client,__version__, filters
 from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 Client = Client(
-    "multibot",
+    "multibots",
     bot_token = "7422590172:AAGtz-B1EW6WChkk37kTqWRlE6w8isFcXl4",
     api_id = 18860540,
     api_hash = "22dd2ad1706199438ab3474e85c9afab"
@@ -172,16 +172,17 @@ async def batch(bot,update):
         for i in range(FROM_MSG_ID-1 ,len(total_messages), 200):
             channel_posts = AsyncIter(await bot.get_messages(int(f'-100{FROM_CHANNEL}'), total_messages[i:i+200]))
             async for message in channel_posts:
-                # msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
-                # try:
+                msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
+                try:
+                    print(msg)
+                    await txt.edit(msg)
+                except FloodWait as e:
+                    await asyncio.sleep(e.value)
+                    await txt.edit(msg)
                     
-                #     await txt.edit(msg)
-                # except FloodWait as e:
-                #     await asyncio.sleep(e.value)
-                #     await txt.edit(msg)
-                    
-                # except Exception as e:
-                #     return await bot.send_message(update.from_user.id,f"problem\n{e}")
+                except Exception as e:
+                    pass
+                    #return await bot.send_message(update.from_user.id,f"problem\n{e}\n{str(type(e))}")
                     
                     
                 message_ids = []
@@ -388,15 +389,14 @@ async def batch(bot,update):
                     unknown_msg_type['total_msg']+1
                     unknown_msg_type['msg_ids'].append(message.id)
                     continue
-                if total % 5 ==0:
-                    msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
-                    await txt.edit(msg)
-                    await asyncio.sleep(3)
-                    # try:
-                    #     await txt.edit(msg)
-                    # except FloodWait as e:
-                    #     await asyncio.sleep(e.value)
-                    #     await txt.edit(msg)
+                # if total % 5 ==0:
+                #     msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
+                    
+                #     try:
+                #         await txt.edit(msg)
+                #     except FloodWait as e:
+                #         await asyncio.sleep(e.value)
+                #         await txt.edit(msg)
                     
                 #     except Exception as e:
                 #         return await bot.send_message(update.from_user.id,f"problem editing txt while totaling\n{e}")
