@@ -175,10 +175,10 @@ async def batch(bot,update):
                 msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
                 try:
                     
-                    await txt.edit(msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}")
+                    await txt.edit(msg)
                 except FloodWait as e:
                     await asyncio.sleep(e.value)
-                    await txt.edit(msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}")
+                    await txt.edit(msg)
                     
                 except Exception as e:
                     return await bot.send_message(update.from_user.id,f"problem\n{e}")
