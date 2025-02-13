@@ -180,8 +180,8 @@ async def batch(bot,update):
                 #     await asyncio.sleep(e.value)
                 #     await txt.edit(msg)
                     
-                except Exception as e:
-                    return await bot.send_message(update.from_user.id,f"problem\n{e}")
+                # except Exception as e:
+                #     return await bot.send_message(update.from_user.id,f"problem\n{e}")
                     
                     
                 message_ids = []
