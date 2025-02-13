@@ -345,6 +345,7 @@ async def batch(bot,update):
                             try:
                                 await txt.edit("Editing Batch Link")
                                 try:
+                                    message_ids = sorted(message_ids)
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#BaTCh_LInK|{' '.join(str(x) for x in message_ids)}")
                                 except FloodWait as e:
                                     await asyncio.sleep(e.value)
