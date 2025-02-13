@@ -12,7 +12,7 @@ from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 Client = Client(
     "multibot",
-    bot_token = "5598160444:AAEpXtNmrHzquJTAZB3KRYFkj3K_-p15eXo",
+    bot_token = "7422590172:AAGtz-B1EW6WChkk37kTqWRlE6w8isFcXl4",
     api_id = 18860540,
     api_hash = "22dd2ad1706199438ab3474e85c9afab"
     )
@@ -108,6 +108,13 @@ async def chiku(bot:Client,msg:Message):
     await msg.edit("done")
     return print(msg,msg.reply_to_message)
 
+@Client.on_message(filters.command("raw") & filters.private|filters.group)
+async def raw(bot,update):
+    if not update.reply_to_message:
+        return await update.reply_text("reply any message to get raw detail of that")
+    try:
+        await update.reply_text(update.Message)
+
 
 
 
@@ -116,7 +123,7 @@ async def chiku(bot:Client,msg:Message):
 @Client.on_message(filters.private & filters.command("batch"))
 async def batch(bot,update):
     if not update.reply_to_message:
-        return await update.reply_text("from_channel_id(without-100)|photo_send_channel(with -100)|start_msg_id|to_msg_id")
+        return await update.reply_text("reply to formate like --- from_channel_id(without-100)|photo_send_channel(with -100)|start_msg_id|to_msg_id")
     
     try:
         FROM_CHANNEL = int(update.reply_to_message.text.split("|")[0])
@@ -151,6 +158,7 @@ async def batch(bot,update):
     try:
         start_time = datetime.datetime.now()
         txt = await update.reply_text(text="Batch File saving Started!")
+        count = 0
         success = 0
         total = 0
         #text_msg_edited = 0
@@ -161,7 +169,7 @@ async def batch(bot,update):
         thumb_id = ""
         default_thumbs = "AgACAgUAAxkBAAECBAJk3lsSOkQFWFZ_x3O8ApD8MjuOaAACGrcxG-6L6VYRRHsls-7JkwAIAQADAgADeAAHHgQ"
         
-        add_detail = "For any query and search movie join - https://t.me/movierequests02"
+        add_detail = ""
         
         
         for i in range(FROM_MSG_ID-1 ,len(total_messages), 200):
@@ -269,6 +277,10 @@ async def batch(bot,update):
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             
                             try:
+                                if count=>90:
+                                    await txt.edit("sleeping for 30 min.......")
+                                    await asyncio.sleep(1800)
+                                    count=0
                                 await txt.edit("sending caption with photo to photo channel")
                                 thumb_path = await bot.download_media(thumb_id)
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/tgfilesstorebot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
@@ -277,6 +289,7 @@ async def batch(bot,update):
                                     media_captions = media_captions[0:1020]
                                 await bot.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 success+=1
+                                count+=1
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}")
                         
@@ -348,6 +361,10 @@ async def batch(bot,update):
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             try:
+                                if count=>90:
+                                    await txt.edit("sleeping for 30 min.......")
+                                    await asyncio.sleep(1800)
+                                    count=0
                                 await txt.edit("sending caption with photo to photo channel")
                                 if not thumb_id:
                                     thumb_id = default_thumbs
@@ -358,6 +375,7 @@ async def batch(bot,update):
                                     media_captions = media_captions[0:1020]
                                 await bot.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 success+=1
+                                count+=1
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}")
                     
@@ -392,12 +410,13 @@ async def batch(bot,update):
 @Client.on_message(filters.private & filters.command("forward"))
 async def forward(bot:Client, update:Message):
     if not update.reply_to_message:
-        await update.reply_text("**send me channels or group ids and message id from where u want to start forward\nchannels ids and messaage id must be separated by |\nexample - \nfrom_channel_id|start_from_message_id|to_channel_id**")
+        await update.reply_text("**send me channels or group ids wuth -100 and message id from where u want to start forward\nchannels ids and messaage id must be separated by |\nexample - \nfrom_channel_id|start_from_message_id|to_channel_id**")
         return
     try:
         FROM_CHANNEL = int(update.reply_to_message.text.split("|")[0])
         START_FROM = int(update.reply_to_message.text.split("|")[1])
         TO_CHANNEL = int(update.reply_to_message.text.split("|")[2])
+    
         try:
             start_time = datetime.datetime.now()
             txt = await update.reply_text(text="Forward Started!")
@@ -456,7 +475,7 @@ async def forward(bot:Client, update:Message):
         return await update.reply_text("don't send me text\nsend me only channel ids and message_id in intiger like --- -1007725455|34|-10037783")
     
     except Exception as e:
-        return await txt.reply_text(f"{e}")
+        return await update.reply_text(f"{e}")
     
     finally:
         end_time = datetime.datetime.now()
