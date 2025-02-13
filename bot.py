@@ -274,7 +274,7 @@ async def batch(bot,update):
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             
                             try:
-                                if count=>90:
+                                if count>=90:
                                     await txt.edit("sleeping for 30 min.......")
                                     await asyncio.sleep(1800)
                                     count=0
@@ -358,7 +358,7 @@ async def batch(bot,update):
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             try:
-                                if count=>90:
+                                if count>=90:
                                     await txt.edit("sleeping for 30 min.......")
                                     await asyncio.sleep(1800)
                                     count=0
