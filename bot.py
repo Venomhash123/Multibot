@@ -836,7 +836,7 @@ def run_bot1():
     Client1().run()
 
 def run_bot2():
-    Client1().run()
+    Client2().run()
 
 def run_bot3():
     Client3().run()
