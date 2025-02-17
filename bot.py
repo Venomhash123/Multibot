@@ -136,7 +136,7 @@ async def raw(bot,update):
     except Exception as e:
         await update.reply_text(e)
 
-@Client.on_message(filters.private & filters.command("batch"))
+@Client1.on_message(filters.private & filters.command("batch"))
 async def batch(bot,update):
     if not update.reply_to_message:
         return await update.reply_text("reply to formate like --- from_channel_id(without-100)|photo_send_channel(with -100)|start_msg_id|to_msg_id")
@@ -834,24 +834,6 @@ class AsyncIter:
             raise StopAsyncIteration from e
 #keep_alive()
 #Client.run()
-# def run_bot1():
-#     Client1.run()
-
-# def run_bot2():
-#     Client2.run()
-
-# def run_bot3():
-#     Client3.run()
-
-
-# thread1 = multiprocessing.Process(target=run_bot1)
-# thread2 = multiprocessing.Process(target=run_bot2)
-# thread3 = multiprocessing.Process(target=run_bot3)
-
-
-# thread1.start()
-# thread2.start()
-# thread3.start()
 def run_bot1():
     Client1.run()
 
@@ -861,15 +843,12 @@ def run_bot2():
 def run_bot3():
     Client3.run()
 
-if __name__ == "__main__":
-    thread1 = multiprocessing.Process(target=run_bot1)
-    thread2 = multiprocessing.Process(target=run_bot2)
-    thread3 = multiprocessing.Process(target=run_bot3)
 
-    thread1.start()
-    thread2.start()
-    thread3.start()
+thread1 = multiprocessing.Process(target=run_bot1)
+thread2 = multiprocessing.Process(target=run_bot2)
+thread3 = multiprocessing.Process(target=run_bot3)
 
-    thread1.join()
-    thread2.join()
-    thread3.join()  
+
+thread1.start()
+thread2.start()
+thread3.start()
