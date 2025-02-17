@@ -10,6 +10,8 @@ from pyrogram.errors import FloodWait
 from pyrogram import Client,__version__, filters
 from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+import threading
+import multiprocessing
 Client1 = Client(
     "multibots",
     bot_token = "7422590172:AAGtz-B1EW6WChkk37kTqWRlE6w8isFcXl4",
