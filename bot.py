@@ -10,7 +10,7 @@ from pyrogram.errors import FloodWait
 from pyrogram import Client,__version__, filters
 from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-Client = Client(
+Client1 = Client(
     "multibots",
     bot_token = "7422590172:AAGtz-B1EW6WChkk37kTqWRlE6w8isFcXl4",
     api_id = 18860540,
@@ -296,7 +296,7 @@ async def batch(bot,update):
                                 #     count=0
                                 await txt.edit("sending caption with photo to photo channel")
                                 if count==1:
-                                    thumb_path = await Client.download_media(thumb_id)
+                                    thumb_path = await Client1.download_media(thumb_id)
                                 if count==2:
                                     thumb_path = await Client2.download_media(thumb_id)
                                 if count==3:
@@ -308,7 +308,7 @@ async def batch(bot,update):
                                     media_captions = media_captions[0:1020]
                                 try:
                                     if count==1:
-                                        await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                        await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==2:
                                         await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==3:
@@ -316,7 +316,7 @@ async def batch(bot,update):
                                 except Exception as e:
                                     if "File size equals to 0 B" in e:
                                         if count==3:
-                                            await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=1
                                         elif count==2:
                                             await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
@@ -409,7 +409,7 @@ async def batch(bot,update):
                                 if not thumb_id:
                                     thumb_id = default_thumbs
                                 if count==1:
-                                    thumb_path = await Client.download_media(thumb_id)
+                                    thumb_path = await Client1.download_media(thumb_id)
                                 if count==2:
                                     thumb_path = await Client2.download_media(thumb_id)
                                 if count==3:
@@ -420,7 +420,7 @@ async def batch(bot,update):
                                     media_captions = media_captions[0:1020]
                                 try:
                                     if count==1:
-                                        await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                        await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==2:
                                         await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==3:
@@ -428,7 +428,7 @@ async def batch(bot,update):
                                 except Exception as e:
                                     if "File size equals to 0 B" in e:
                                         if count==3:
-                                            await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=1
                                         elif count==2:
                                             await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
@@ -833,7 +833,7 @@ class AsyncIter:
 #keep_alive()
 #Client.run()
 def run_bot1():
-    Client().run()
+    Client1().run()
 
 def run_bot2():
     Client1().run()
