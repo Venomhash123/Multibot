@@ -834,6 +834,24 @@ class AsyncIter:
             raise StopAsyncIteration from e
 #keep_alive()
 #Client.run()
+# def run_bot1():
+#     Client1.run()
+
+# def run_bot2():
+#     Client2.run()
+
+# def run_bot3():
+#     Client3.run()
+
+
+# thread1 = multiprocessing.Process(target=run_bot1)
+# thread2 = multiprocessing.Process(target=run_bot2)
+# thread3 = multiprocessing.Process(target=run_bot3)
+
+
+# thread1.start()
+# thread2.start()
+# thread3.start()
 def run_bot1():
     Client1.run()
 
@@ -843,12 +861,15 @@ def run_bot2():
 def run_bot3():
     Client3.run()
 
+if __name__ == "__main__":
+    thread1 = multiprocessing.Process(target=run_bot1)
+    thread2 = multiprocessing.Process(target=run_bot2)
+    thread3 = multiprocessing.Process(target=run_bot3)
 
-thread1 = multiprocessing.Process(target=run_bot1)
-thread2 = multiprocessing.Process(target=run_bot2)
-thread3 = multiprocessing.Process(target=run_bot3)
+    thread1.start()
+    thread2.start()
+    thread3.start()
 
-
-thread1.start()
-thread2.start()
-thread3.start()
+    thread1.join()
+    thread2.join()
+    thread3.join()  
