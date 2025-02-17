@@ -12,10 +12,27 @@ from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 Client = Client(
     "multibots",
+    bot_token = "7422590172:AAGtz-B1EW6WChkk37kTqWRlE6w8isFcXl4",
+    api_id = 18860540,
+    api_hash = "22dd2ad1706199438ab3474e85c9afab"
+    )
+
+Client2 = Client(
+    "multibots2",
     bot_token = "5598160444:AAEpXtNmrHzquJTAZB3KRYFkj3K_-p15eXo",
     api_id = 18860540,
     api_hash = "22dd2ad1706199438ab3474e85c9afab"
     )
+
+
+Client3 = Client(
+    "multibots3",
+    bot_token = "8197057006:AAFYjE2l0Kmtgkb991sRvF6Bpvsve4cscoE",
+    api_id = 18860540,
+    api_hash = "22dd2ad1706199438ab3474e85c9afab"
+    )
+
+
 
 
 async def get_file_size(msg:Message):
@@ -155,7 +172,7 @@ async def batch(bot,update):
     try:
         start_time = datetime.datetime.now()
         txt = await update.reply_text(text="Batch File saving Started!")
-        count = 0
+        count = 1
         success = 0
         total = 0
         #text_msg_edited = 0
@@ -165,7 +182,6 @@ async def batch(bot,update):
         total_messages = (range(1,TO_MSG_ID))
         thumb_id = ""
         default_thumbs = "AgACAgEAAxkBAAMdZ61UvEL1el8goDjtZPrPo0OC8zsAAk2wMRsoQnFFuDpuOm0RYgsACAEAAwIAA3MABx4E"
-        
         add_detail = ""
         
         
@@ -274,20 +290,45 @@ async def batch(bot,update):
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             
                             try:
-                                if count>=90:
-                                    await txt.edit("sleeping for 30 min.......")
-                                    await asyncio.sleep(1800)
-                                    count=0
+                                # if count>=90:
+                                #     await txt.edit("sleeping for 30 min.......")
+                                #     await asyncio.sleep(1800)
+                                #     count=0
                                 await txt.edit("sending caption with photo to photo channel")
-                                thumb_path = await bot.download_media(thumb_id)
+                                if count==1:
+                                    thumb_path = await Client.download_media(thumb_id)
+                                if count==2:
+                                    thumb_path = await Client2.download_media(thumb_id)
+                                if count==3:
+                                    thumb_path = await Client3.download_media(thumb_id)
+                                
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
-                                await bot.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                try:
+                                    if count==1:
+                                        await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                    if count==2:
+                                        await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                    if count==3:
+                                        await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                except Exception as e:
+                                    if "File size equals to 0 B" in e:
+                                        if count==3:
+                                            await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            count=1
+                                        elif count==2:
+                                            await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            count=3
+                                        else:
+                                            await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            count=2
+                                    else:
+                                        return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}")
                                 thumb_id=""
                                 success+=1
-                                count+=1
+                                #count+=1
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}")
                         
@@ -360,19 +401,44 @@ async def batch(bot,update):
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
                             try:
-                                if count>=90:
-                                    await txt.edit("sleeping for 30 min.......")
-                                    await asyncio.sleep(1800)
-                                    count=0
+                                # if count>=90:
+                                #     await txt.edit("sleeping for 30 min.......")
+                                #     await asyncio.sleep(1800)
+                                #     count=0
                                 await txt.edit("sending caption with photo to photo channel")
                                 if not thumb_id:
                                     thumb_id = default_thumbs
-                                thumb_path = await bot.download_media(thumb_id)
+                                if count==1:
+                                    thumb_path = await Client.download_media(thumb_id)
+                                if count==2:
+                                    thumb_path = await Client2.download_media(thumb_id)
+                                if count==3:
+                                    thumb_path = await Client3.download_media(thumb_id)
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
-                                await bot.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                try:
+                                    if count==1:
+                                        await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                    if count==2:
+                                        await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                    if count==3:
+                                        await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                except Exception as e:
+                                    if "File size equals to 0 B" in e:
+                                        if count==3:
+                                            await Client.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            count=1
+                                        elif count==2:
+                                            await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            count=3
+                                        else:
+                                            await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            count=2
+                                    else:
+                                        return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}")
+                                
                                 thumb_id=""
                                 success+=1
                                 count+=1
@@ -765,4 +831,22 @@ class AsyncIter:
         except StopIteration as e:
             raise StopAsyncIteration from e
 #keep_alive()
-Client.run()
+#Client.run()
+def run_bot1():
+    Client().run()
+
+def run_bot2():
+    Client1().run()
+
+def run_bot3():
+    Client3().run()
+
+
+thread1 = multiprocessing.Process(target=run_bot1)
+thread2 = multiprocessing.Process(target=run_bot2)
+thread3 = multiprocessing.Process(target=run_bot3)
+
+
+thread1.start()
+thread2.start()
+thread3.start()
