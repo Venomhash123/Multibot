@@ -3,6 +3,7 @@ import time
 import asyncio
 import datetime
 import re
+import traceback
 from base64 import standard_b64encode, standard_b64decode
 #from config import Config
 #from keep_alive import keep_alive
@@ -73,10 +74,16 @@ def b64_to_str(b64: str) -> str:
     bytes_str = standard_b64decode(bytes_b64)
     __str = bytes_str.decode('ascii')
     return __str
+@Client2.on_message(filters.command("start") & filters.private|filters.group)
+async def star(bot,update):
+    await update.reply_text("bot_is_live",quote=True,reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('+ADD ME TO YOUR GROUPS', callback_data="check")]]))
+
+@Client3.on_message(filters.command("start") & filters.private|filters.group)
+async def star(bot,update):
+    await update.reply_text("bot_is_live",quote=True,reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('+ADD ME TO YOUR GROUPS', callback_data="check")]]))
 
 
-
-@Client.on_message(filters.command("start") & filters.private|filters.group)
+@Client1.on_message(filters.command("start") & filters.private|filters.group)
 async def star(bot,update):
     #msg = await bot.get_messages(-1001953021632,38)
     #print(msg)
@@ -316,7 +323,7 @@ async def batch(bot,update):
                                     if count==3:
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 except Exception as e:
-                                    if "File size equals to 0 B" in e:
+                                    if "File size equals to 0 B" in str(e):
                                         if count==3:
                                             await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=1
@@ -327,12 +334,11 @@ async def batch(bot,update):
                                             await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=2
                                     else:
-                                        return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}")
+                                        return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
                                 thumb_id=""
                                 success+=1
-                                #count+=1
                             except Exception as e:
-                                return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}")
+                                return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}\n{traceback.format_exc()}")
                         
                         
                         else:
@@ -428,7 +434,7 @@ async def batch(bot,update):
                                     if count==3:
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 except Exception as e:
-                                    if "File size equals to 0 B" in e:
+                                    if "File size equals to 0 B" in str(e):
                                         if count==3:
                                             await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=1
@@ -439,13 +445,12 @@ async def batch(bot,update):
                                             await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=2
                                     else:
-                                        return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}")
+                                        return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
                                 
                                 thumb_id=""
                                 success+=1
-                                count+=1
                             except Exception as e:
-                                return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}")
+                                return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}\n{traceback.format_exc()}")
                     
                                 
                                 
