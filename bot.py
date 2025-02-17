@@ -304,33 +304,32 @@ async def batch(bot,update):
                                 #     await asyncio.sleep(1800)
                                 #     count=0
                                 await txt.edit("sending caption with photo to photo channel")
-                                if count==1:
-                                    thumb_path = await Client1.download_media(thumb_id)
-                                if count==2:
-                                    thumb_path = await Client2.download_media(thumb_id)
-                                if count==3:
-                                    thumb_path = await Client3.download_media(thumb_id)
-                                
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
                                 try:
                                     if count==1:
+                                        thumb_path = await Client1.download_media(thumb_id)
                                         await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==2:
+                                        thumb_path = await Client2.download_media(thumb_id)
                                         await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==3:
+                                        thumb_path = await Client3.download_media(thumb_id)
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 except Exception as e:
                                     if "File size equals to 0 B" in str(e):
                                         if count==3:
+                                            thumb_path = await Client1.download_media(thumb_id)
                                             await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=1
                                         elif count==2:
+                                            thumb_path = await Client3.download_media(thumb_id)
                                             await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=3
                                         else:
+                                            thumb_path = await Client2.download_media(thumb_id)
                                             await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=2
                                     else:
@@ -416,32 +415,32 @@ async def batch(bot,update):
                                 await txt.edit("sending caption with photo to photo channel")
                                 if not thumb_id:
                                     thumb_id = default_thumbs
-                                if count==1:
-                                    thumb_path = await Client1.download_media(thumb_id)
-                                if count==2:
-                                    thumb_path = await Client2.download_media(thumb_id)
-                                if count==3:
-                                    thumb_path = await Client3.download_media(thumb_id)
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
                                 try:
                                     if count==1:
+                                        thumb_path = await Client1.download_media(thumb_id)
                                         await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==2:
+                                        thumb_path = await Client2.download_media(thumb_id)
                                         await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==3:
+                                        thumb_path = await Client3.download_media(thumb_id)
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 except Exception as e:
                                     if "File size equals to 0 B" in str(e):
                                         if count==3:
+                                            thumb_path = await Client1.download_media(thumb_id)
                                             await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=1
                                         elif count==2:
+                                            thumb_path = await Client3.download_media(thumb_id)
                                             await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=3
                                         else:
+                                            thumb_path = await Client2.download_media(thumb_id)
                                             await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=2
                                     else:
