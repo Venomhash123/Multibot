@@ -134,7 +134,7 @@ async def chiku(bot:Client,msg:Message):
     await msg.edit("done")
     return print(msg,msg.reply_to_message)
 
-@Client.on_message(filters.command("raw") & filters.private|filters.group)
+@Client1.on_message(filters.command("raw") & filters.private|filters.group)
 async def raw(bot,update):
     if not update.reply_to_message:
         return await update.reply_text("reply any message to get raw detail of that")
@@ -142,6 +142,26 @@ async def raw(bot,update):
         print(update)
     except Exception as e:
         await update.reply_text(e)
+
+@Client2.on_message(filters.command("raw") & filters.private|filters.group)
+async def raw(bot,update):
+    if not update.reply_to_message:
+        return await update.reply_text("reply any message to get raw detail of that")
+    try:
+        print(update)
+    except Exception as e:
+        await update.reply_text(e)
+
+@Client3.on_message(filters.command("raw") & filters.private|filters.group)
+async def raw(bot,update):
+    if not update.reply_to_message:
+        return await update.reply_text("reply any message to get raw detail of that")
+    try:
+        print(update)
+    except Exception as e:
+        await update.reply_text(e)
+
+
 
 @Client1.on_message(filters.private & filters.command("batch"))
 async def batch(bot,update):
