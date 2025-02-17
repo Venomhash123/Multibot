@@ -835,13 +835,13 @@ class AsyncIter:
 #keep_alive()
 #Client.run()
 def run_bot1():
-    Client1().run()
+    Client1.run()
 
 def run_bot2():
-    Client2().run()
+    Client2.run()
 
 def run_bot3():
-    Client3().run()
+    Client3.run()
 
 
 thread1 = multiprocessing.Process(target=run_bot1)
