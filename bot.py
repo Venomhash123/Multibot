@@ -7,35 +7,22 @@ import traceback
 from base64 import standard_b64encode, standard_b64decode
 #from config import Config
 #from keep_alive import keep_alive
+from pyrogram import raw
 from pyrogram.errors import FloodWait
 from pyrogram import Client,__version__, filters
 from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 import threading
 import multiprocessing
+default_thumbs1 = "AgACAgEAAxkBAAMdZ61UvEL1el8goDjtZPrPo0OC8zsAAk2wMRsoQnFFuDpuOm0RYgsACAEAAwIAA3MABx4E"
+default_thumbs2 = "AgACAgEAAxkBAAJJ92e0CSck2uAMkFOGGbwEu7B7c7plAAJNsDEbKEJxRSPmywrRR6ylAAgBAAMCAANtAAceBA"
+default_thumbs3 = "AgACAgEAAxkBAAMgZ7QJG0jcOwABUV2j7AqPUrrU1AxoAAJNsDEbKEJxRWEg5vV7-Wc8AAgBAAMCAANtAAceBA"
 Client1 = Client(
-    "multibots",
+    "multibot1",
     bot_token = "7422590172:AAGtz-B1EW6WChkk37kTqWRlE6w8isFcXl4",
     api_id = 18860540,
     api_hash = "22dd2ad1706199438ab3474e85c9afab"
     )
-
-Client2 = Client(
-    "multibots2",
-    bot_token = "5598160444:AAEpXtNmrHzquJTAZB3KRYFkj3K_-p15eXo",
-    api_id = 18860540,
-    api_hash = "22dd2ad1706199438ab3474e85c9afab"
-    )
-
-
-Client3 = Client(
-    "multibots3",
-    bot_token = "8197057006:AAFYjE2l0Kmtgkb991sRvF6Bpvsve4cscoE",
-    api_id = 18860540,
-    api_hash = "22dd2ad1706199438ab3474e85c9afab"
-    )
-
-
 
 
 async def get_file_size(msg:Message):
@@ -74,13 +61,6 @@ def b64_to_str(b64: str) -> str:
     bytes_str = standard_b64decode(bytes_b64)
     __str = bytes_str.decode('ascii')
     return __str
-@Client2.on_message(filters.command("start") & filters.private|filters.group)
-async def star(bot,update):
-    await update.reply_text("bot_is_live",quote=True,reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('+ADD ME TO YOUR GROUPS', callback_data="check")]]))
-
-@Client3.on_message(filters.command("start") & filters.private|filters.group)
-async def star(bot,update):
-    await update.reply_text("bot_is_live",quote=True,reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('+ADD ME TO YOUR GROUPS', callback_data="check")]]))
 
 
 @Client1.on_message(filters.command("start") & filters.private|filters.group)
@@ -123,41 +103,96 @@ async def star(bot,update):
     #     await text.edit(msg)    
     await update.reply_text("bot_is_live",quote=True,reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('+ADD ME TO YOUR GROUPS', callback_data="check")]]))
 @Client.on_callback_query()
-async def button(bot:Client, cmd:CallbackQuery):
+async def button(bot,CallbackQuery):
     cb_data = cmd.data
     if "check" in cb_data:
         await cmd.answer(url=f"https://t.me/dc4botz01_bot?start=send_")
         #await chiku(bot,cmd.message)
+async def single_link_thumb(bot,fid,mesg,indentity):
+    thumb_id=""
+    try:
+        mesg = await bot.get_messages(int(f'-100{fid}'),mesg.id-1)
+    except FloodWait as e:
+        await asyncio.sleep(e.value) 
+        mesg = await bot.get_messages(int(f'-100{fid}'),mesg.id-1)
+    except Exception as e:
+        return f"wrong\n{e}"
+        
+    if mesg.video:
+        thumb_id+=mesg.video.thumbs[0].file_id
+    elif mesg.document and mesg.document.thumbs:
+        thumb_id+=mesg.document.thumbs[0].file_id
+    elif mesg.audio and mesg.audio.thumbs:
+        thumb_id+=mesg.audio.thumbs[0].file_id
+    else:
+        if indentity==1:
+            thumb_id = default_thumbs1
+        elif indentity==2:
+            thumb_id=default_thumbs2
+        else:
+            thumb_id=default_thumbs3
+    
+    return thumb_id
 
 
-async def chiku(bot:Client,msg:Message):
+async def batch_thumb_id(bot,fid,mesg,indentity):
+    thumb_id=""
+    media_caption=""
+    message_ids=[]
+    before_10_batch_mesg = AsyncIter(await bot.get_messages(int(f'-100{fid}'),range(mesg.id-1,mesg.id-11,-1)))#only can save 10 msg in batch
+    async for messg in before_10_batch_mesg:
+        if messg.service or messg.empty:
+            continue
+        elif messg.video:
+            media_caption+=f"**👉{messg.caption} {await get_file_size(messg)}**\n\n" if messg.caption else "\n"
+            message_ids.append(messg.id)
+            if not thumb_id:
+                if messg.video.thumbs:
+                    thumb_id+=f"{messg.video.thumbs[0].file_id}"
+            continue
+        elif messg.document:
+            media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
+            message_ids.append(messg.id)
+            if not thumb_id:
+                if messg.document.thumbs:
+                    thumb_id+=f"{messg.document.thumbs[0].file_id}"
+            continue
+        elif messg.audio:
+            media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
+            message_ids.append(messg.id)
+            if not thumb_id:
+                if messg.audio.thumbs:
+                    thumb_id+=f"{messg.audio.thumbs[0].file_id}"
+        
+            continue
+        elif (messg.text) and ("Open Link" in messg.text):
+            break
+        
+        else:
+            return "wrong","wrong","wrong"#there are another type of message rather than video,document,audio between given batch links
+    if not thumb_id:
+        if indentity==1:
+            thumb_id=default_thumbs1
+        elif indentity==2:
+            thumb_id=default_thumbs2
+        else:
+            thumb_id=default_thumbs3
+        
+    return thumb_id,media_caption,message_ids
+
+
+
+async def chiku(bot,msg):
     await msg.edit("done")
     return print(msg,msg.reply_to_message)
 
-@Client1.on_message(filters.command("raw") & filters.private|filters.group)
-async def raw(bot,update):
-    if not update.reply_to_message:
-        return await update.reply_text("reply any message to get raw detail of that")
-    try:
-        print(update)
-    except Exception as e:
-        await update.reply_text(e)
 
-@Client2.on_message(filters.command("raw") & filters.private|filters.group)
+@Client.on_message(filters.command("raw") & filters.private|filters.group)
 async def raw(bot,update):
     if not update.reply_to_message:
         return await update.reply_text("reply any message to get raw detail of that")
     try:
-        print(update)
-    except Exception as e:
-        await update.reply_text(e)
-
-@Client3.on_message(filters.command("raw") & filters.private|filters.group)
-async def raw(bot,update):
-    if not update.reply_to_message:
-        return await update.reply_text("reply any message to get raw detail of that")
-    try:
-        print(update)
+        await update.reply_text(update.reply_to_message.photo.file_id)
     except Exception as e:
         await update.reply_text(e)
 
@@ -209,9 +244,24 @@ async def batch(bot,update):
         unknown_msg_type = {'total_msg':0,'msg_ids':[]}
         empty = 0
         total_messages = (range(1,TO_MSG_ID))
-        thumb_id = ""
-        default_thumbs = "AgACAgEAAxkBAAMdZ61UvEL1el8goDjtZPrPo0OC8zsAAk2wMRsoQnFFuDpuOm0RYgsACAEAAwIAA3MABx4E"
+        #thumb_id = ""
         add_detail = ""
+        Client2 = Client(
+            "multibot2",
+            bot_token = "5598160444:AAEpXtNmrHzquJTAZB3KRYFkj3K_-p15eXo",
+            api_id = 18860540,
+            api_hash = "22dd2ad1706199438ab3474e85c9afab"
+            )
+
+
+        Client3 = Client(
+            "multibot3",
+            bot_token = "8197057006:AAFYjE2l0Kmtgkb991sRvF6Bpvsve4cscoE",
+            api_id = 18860540,
+            api_hash = "22dd2ad1706199438ab3474e85c9afab"
+            )
+
+        
         
         
         for i in range(FROM_MSG_ID-1 ,len(total_messages), 200):
@@ -278,14 +328,14 @@ async def batch(bot,update):
                                     message_ids.append(mesg.id)
                                     media_size = await get_file_size(mesg)
                                     media_caption+=f"**👉{mesg.caption} {media_size}**" if mesg.caption else ""
-                                    if mesg.video:
-                                        thumb_id+=mesg.video.thumbs[0].file_id
-                                    elif mesg.document and mesg.document.thumbs:
-                                        thumb_id+=mesg.document.thumbs[0].file_id
-                                    elif mesg.audio and mesg.audio.thumbs:
-                                        thumb_id+=mesg.audio.thumbs[0].file_id
-                                    else:
-                                        thumb_id = default_thumbs
+                                    # if mesg.video:
+                                    #     thumb_id+=mesg.video.thumbs[0].file_id
+                                    # elif mesg.document and mesg.document.thumbs:
+                                    #     thumb_id+=mesg.document.thumbs[0].file_id
+                                    # elif mesg.audio and mesg.audio.thumbs:
+                                    #     thumb_id+=mesg.audio.thumbs[0].file_id
+                                    # else:
+                                    #     thumb_id = default_thumbs
                                     break
                                 elif mesg2.empty or mesg2.service:
                                     
@@ -296,7 +346,7 @@ async def batch(bot,update):
                             return  await bot.send_message(update.from_user.id,f"mesg is empty before single link\nmessage_id:{message.id}")
                         
                         else:
-                            return await bot.send_message(update.from_user.id,f"messo don't  give in correct sequence in FROM_CHANNEL\nmessage_id:{message.id}")
+                            return await bot.send_message(update.from_user.id,f"message don't  give in correct sequence in FROM_CHANNEL\nmessage_id:{message.id}")
                         if len(message_ids)==0:
                             return await bot.send_message(update.from_user.id,f"message_ids list len is zero\n{message.id}")
                         elif len(message_ids)==1:
@@ -330,32 +380,57 @@ async def batch(bot,update):
                                     media_captions = media_captions[0:1020]
                                 try:
                                     if count==1:
+                                        thumb_id = await single_link_thumb(Client1,FROM_CHANNEL,message,1)
+                                        if "wrong" in thumb_id:
+                                            return await bot.send_message(update.from_user.id,f"{thumb_id}")
                                         thumb_path = await Client1.download_media(thumb_id)
                                         await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==2:
+                                        async with Client2:
+                                            thumb_id = await single_link_thumb(Client2,FROM_CHANNEL,message,2)
+                                        if "wrong" in thumb_id:
+                                            return await bot.send_message(update.from_user.id,f"{thumb_id}")
                                         thumb_path = await Client2.download_media(thumb_id)
                                         await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                        
                                     if count==3:
+                                        async with Client3:
+                                            thumb_id = await single_link_thumb(Client3,FROM_CHANNEL,message,3)
+                                        if "wrong" in thumb_id:
+                                            return await bot.send_message(update.from_user.id,f"{thumb_id}")
                                         thumb_path = await Client3.download_media(thumb_id)
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                
                                 except Exception as e:
                                     if "File size equals to 0 B" in str(e):
                                         if count==3:
+                                            thumb_id = await single_link_thumb(Client1,FROM_CHANNEL,message,1)
+                                            if "wrong" in thumb_id:
+                                                return await bot.send_message(update.from_user.id,f"{thumb_id}")
                                             thumb_path = await Client1.download_media(thumb_id)
                                             await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                             count=1
                                         elif count==2:
-                                            thumb_path = await Client3.download_media(thumb_id)
-                                            await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                            count=3
+                                            async with Client3:
+                                                thumb_id = await single_link_thumb(Client3,FROM_CHANNEL,message,3)
+                                                if "wrong" in thumb_id:
+                                                    return await bot.send_message(update.from_user.id,f"{thumb_id}")
+                                                thumb_path = await Client3.download_media(thumb_id)
+                                                await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                                count=3
                                         else:
-                                            thumb_path = await Client2.download_media(thumb_id)
-                                            await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                            count=2
+                                            async with Client2:
+                                                thumb_id = await single_link_thumb(Client2,FROM_CHANNEL,message,2)
+                                                if "wrong" in thumb_id:
+                                                    return await bot.send_message(update.from_user.id,f"{thumb_id}")
+                                                thumb_path = await Client2.download_media(thumb_id)
+                                                await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                                count=2
                                     else:
                                         return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
-                                thumb_id=""
+                                #thumb_id=""
                                 success+=1
+                                #count+=1
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}\n{traceback.format_exc()}")
                         
@@ -379,37 +454,55 @@ async def batch(bot,update):
                         if (next_msg.text) and (not "Open Link" in next_msg.text):
                             return await bot.send_message(update.from_user.id,f"there is not batch file link message after batch_link message\nplz adjust all mesaages according to given formate")
                         
-                        before_10_batch_mesg = AsyncIter(await bot.get_messages(int(f'-100{FROM_CHANNEL}'),range(message.id-1,message.id-11,-1)))#only can save 10 msg in batch
-                        async for messg in before_10_batch_mesg:
-                            if messg.service or messg.empty:
-                                continue
-                            elif messg.video:
-                                media_caption+=f"**👉{messg.caption} {await get_file_size(messg)}**\n\n" if messg.caption else "\n"
-                                message_ids.append(messg.id)
-                                if not thumb_id:
-                                    if messg.video.thumbs:
-                                        thumb_id+=f"{messg.video.thumbs[0].file_id}"
-                                continue
-                            elif messg.document:
-                                media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
-                                message_ids.append(messg.id)
-                                if not thumb_id:
-                                    if messg.document.thumbs:
-                                        thumb_id+=f"{messg.document.thumbs[0].file_id}"
-                                continue
-                            elif messg.audio:
-                                media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
-                                message_ids.append(messg.id)
-                                if not thumb_id:
-                                    if messg.audio.thumbs:
-                                        thumb_id+=f"{messg.audio.thumbs[0].file_id}"
+                        # before_10_batch_mesg = AsyncIter(await bot.get_messages(int(f'-100{FROM_CHANNEL}'),range(message.id-1,message.id-11,-1)))#only can save 10 msg in batch
+                        # async for messg in before_10_batch_mesg:
+                        #     if messg.service or messg.empty:
+                        #         continue
+                        #     elif messg.video:
+                        #         media_caption+=f"**👉{messg.caption} {await get_file_size(messg)}**\n\n" if messg.caption else "\n"
+                        #         message_ids.append(messg.id)
+                        #         if not thumb_id:
+                        #             if messg.video.thumbs:
+                        #                 thumb_id+=f"{messg.video.thumbs[0].file_id}"
+                        #         continue
+                        #     elif messg.document:
+                        #         media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
+                        #         message_ids.append(messg.id)
+                        #         if not thumb_id:
+                        #             if messg.document.thumbs:
+                        #                 thumb_id+=f"{messg.document.thumbs[0].file_id}"
+                        #         continue
+                        #     elif messg.audio:
+                        #         media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
+                        #         message_ids.append(messg.id)
+                        #         if not thumb_id:
+                        #             if messg.audio.thumbs:
+                        #                 thumb_id+=f"{messg.audio.thumbs[0].file_id}"
                             
-                                continue
-                            elif (messg.text) and ("Open Link" in messg.text):
-                                break
+                        #         continue
+                        #     elif (messg.text) and ("Open Link" in messg.text):
+                        #         break
                             
-                            else:
+                        #     else:
+                        #         return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                        if count==1:
+                            thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
+                            if thumb_id=="wrong":
                                 return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                        if count==2:
+                            async with Client2:
+                                thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,2)
+                                if thumb_id=="wrong":
+                                    return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                        
+                        if count==3:
+                            async with Client3:
+                                thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
+                                if thumb_id=="wrong":
+                                    return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                        
+                        
+                        
                         if len(message_ids)>1:
                             try:
                                 await txt.edit("Editing Batch Link")
@@ -433,8 +526,8 @@ async def batch(bot,update):
                                 #     await asyncio.sleep(1800)
                                 #     count=0
                                 await txt.edit("sending caption with photo to photo channel")
-                                if not thumb_id:
-                                    thumb_id = default_thumbs
+                                # if not thumb_id:
+                                #     thumb_id = default_thumbs
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
@@ -444,30 +537,45 @@ async def batch(bot,update):
                                         thumb_path = await Client1.download_media(thumb_id)
                                         await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==2:
-                                        thumb_path = await Client2.download_media(thumb_id)
-                                        await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                        async with Client2:
+                                            thumb_path = await Client2.download_media(thumb_id)
+                                            await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                     if count==3:
                                         thumb_path = await Client3.download_media(thumb_id)
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 except Exception as e:
                                     if "File size equals to 0 B" in str(e):
                                         if count==3:
-                                            thumb_path = await Client1.download_media(thumb_id)
-                                            await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                            count=1
+                                            async with Client1:
+                                                thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
+                                                if thumb_id=="wrong":
+                                                    return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                                thumb_path = await Client1.download_media(thumb_id)
+                                                await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                                count=1
                                         elif count==2:
-                                            thumb_path = await Client3.download_media(thumb_id)
-                                            await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                            count=3
+                                            async with Client3:
+                                                thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
+                                                if thumb_id=="wrong":
+                                                    return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                                thumb_path = await Client3.download_media(thumb_id)
+                                                await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                                count=3
                                         else:
-                                            thumb_path = await Client2.download_media(thumb_id)
-                                            await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                            count=2
+                                            async with Client2:
+                                                thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,2)
+                                                if thumb_id=="wrong":
+                                                    return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                                thumb_path = await Client2.download_media(thumb_id)
+                                                await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                                count=2
+                                            
                                     else:
                                         return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
                                 
-                                thumb_id=""
+                                #thumb_id=""
                                 success+=1
+                                #count+=1
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}\n{traceback.format_exc()}")
                     
@@ -856,23 +964,9 @@ class AsyncIter:
             return next(self.iter)
         except StopIteration as e:
             raise StopAsyncIteration from e
+
+
+
+
 #keep_alive()
-#Client.run()
-def run_bot1():
-    Client1.run()
-
-def run_bot2():
-    Client2.run()
-
-def run_bot3():
-    Client3.run()
-
-
-thread1 = multiprocessing.Process(target=run_bot1)
-thread2 = multiprocessing.Process(target=run_bot2)
-thread3 = multiprocessing.Process(target=run_bot3)
-
-
-thread1.start()
-thread2.start()
-thread3.start()
+Client1.run()
