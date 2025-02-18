@@ -402,7 +402,7 @@ async def batch(bot,update):
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 
                                 except Exception as e:
-                                    if "File size equals to 0 B" in str(e):
+                                    if "auth.ExportAuthorization" in str(e):
                                         if count==3:
                                             thumb_id = await single_link_thumb(Client1,FROM_CHANNEL,message,1)
                                             if "wrong" in thumb_id:
@@ -544,7 +544,7 @@ async def batch(bot,update):
                                         thumb_path = await Client3.download_media(thumb_id)
                                         await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                 except Exception as e:
-                                    if "File size equals to 0 B" in str(e):
+                                    if "auth.ExportAuthorization" in str(e):
                                         if count==3:
                                             async with Client1:
                                                 thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
