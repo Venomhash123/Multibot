@@ -426,6 +426,8 @@ async def batch(bot,update):
                                                 thumb_path = await Client2.download_media(thumb_id)
                                                 await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                                 count=2
+                                    if "Client has not been started yet" in str(e):
+                                        pass
                                     else:
                                         return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
                                 #thumb_id=""
@@ -569,7 +571,9 @@ async def batch(bot,update):
                                                 thumb_path = await Client2.download_media(thumb_id)
                                                 await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
                                                 count=2
-                                            
+                                    if "Client has not been started yet" in str(e):
+                                        pass        
+                                    
                                     else:
                                         return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
                                 
