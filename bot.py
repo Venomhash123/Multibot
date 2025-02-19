@@ -417,7 +417,7 @@ async def batch(bot,update):
                                             try:
                                                 if "auth.ExportAuthorization" in str(e):
                                                     async with Client3:
-                                                        thumb_id = await single_link_thumb(Client2,FROM_CHANNEL,message,3)
+                                                        thumb_id = await single_link_thumb(Client3,FROM_CHANNEL,message,3)
                                                         if "wrong" in thumb_id:
                                                             return await bot.send_message(update.from_user.id,f"{thumb_id}")
                                                         thumb_path = await Client3.download_media(thumb_id)
@@ -610,7 +610,7 @@ async def batch(bot,update):
                                             try:
                                                 if "auth.ExportAuthorization" in str(e):
                                                     async with Client3:
-                                                        thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,3)
+                                                        thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
                                                         if thumb_id=="wrong":
                                                             return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
                                                         thumb_path = await Client3.download_media(thumb_id)
@@ -619,7 +619,7 @@ async def batch(bot,update):
                                                     return await bot.send_message(update.from_user.id,f"something else with Client2\n{e}\n{traceback.format_exc()}")
                                             except Exception as e:
                                                 if "auth.ExportAuthorization" in str(e):
-                                                    thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,3)
+                                                    thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
                                                     if thumb_id=="wrong":
                                                         return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
                                                     thumb_path = await Client1.download_media(thumb_id)
