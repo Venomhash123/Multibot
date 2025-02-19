@@ -549,28 +549,30 @@ async def batch(bot,update):
                                     if "auth.ExportAuthorization" in str(e):
                                         if count==3:
                                             async with Client1:
+                                                count=1
                                                 thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
                                                 if thumb_id=="wrong":
                                                     return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
                                                 thumb_path = await Client1.download_media(thumb_id)
                                                 await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                                count=1
                                         elif count==2:
                                             async with Client3:
+                                                count=3
                                                 thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
                                                 if thumb_id=="wrong":
                                                     return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
                                                 thumb_path = await Client3.download_media(thumb_id)
                                                 await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                                count=3
+                                                
                                         else:
                                             async with Client2:
+                                                count=2
                                                 thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,2)
                                                 if thumb_id=="wrong":
                                                     return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
                                                 thumb_path = await Client2.download_media(thumb_id)
                                                 await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                                count=2
+                                                
                                     if "Client has not been started yet" in str(e):
                                         pass        
                                     
