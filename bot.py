@@ -151,14 +151,14 @@ async def batch_thumb_id(bot,fid,mesg,indentity):
                     thumb_id+=f"{messg.video.thumbs[0].file_id}"
             continue
         elif messg.document:
-            media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
+            media_caption+=f"**👉{messg.caption} {await get_file_size(messg)}**\n\n" if messg.caption else "\n"
             message_ids.append(messg.id)
             if not thumb_id:
                 if messg.document.thumbs:
                     thumb_id+=f"{messg.document.thumbs[0].file_id}"
             continue
         elif messg.audio:
-            media_caption+=f"**👉{messg.caption} {get_file_size(messg)}**\n\n" if messg.caption else "\n"
+            media_caption+=f"**👉{messg.caption} {await get_file_size(messg)}**\n\n" if messg.caption else "\n"
             message_ids.append(messg.id)
             if not thumb_id:
                 if messg.audio.thumbs:
