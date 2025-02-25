@@ -117,14 +117,21 @@ async def single_link_thumb(bot,fid,mesg,indentity):
         mesg = await bot.get_messages(int(f'-100{fid}'),mesg.id-1)
     except Exception as e:
         return f"wrong\n{e}"
-        
-    if mesg.video:
-        thumb_id+=mesg.video.thumbs[0].file_id
-    elif mesg.document and mesg.document.thumbs:
-        thumb_id+=mesg.document.thumbs[0].file_id
-    elif mesg.audio and mesg.audio.thumbs:
-        thumb_id+=mesg.audio.thumbs[0].file_id
-    else:
+    try:    
+        if mesg.video:
+            thumb_id+=mesg.video.thumbs[0].file_id
+        elif mesg.document and mesg.document.thumbs:
+            thumb_id+=mesg.document.thumbs[0].file_id
+        elif mesg.audio and mesg.audio.thumbs:
+            thumb_id+=mesg.audio.thumbs[0].file_id
+        else:
+            if indentity==1:
+                thumb_id = default_thumbs1
+            elif indentity==2:
+                thumb_id=default_thumbs2
+            else:
+                thumb_id=default_thumbs3
+    except Exception as e:
         if indentity==1:
             thumb_id = default_thumbs1
         elif indentity==2:
