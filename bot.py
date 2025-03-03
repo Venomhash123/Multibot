@@ -562,8 +562,9 @@ async def batch(bot,update):
                         
                         
                         
-                        if len(message_ids)>1:
-                            try:
+                        #if len(message_ids)>1:
+                        try:
+                            if len(message_ids)>1:
                                 await txt.edit("Editing Batch Link")
                                 try:
                                     message_ids = sorted(message_ids)
@@ -579,102 +580,121 @@ async def batch(bot,update):
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                             except Exception as e:
                                 return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
-                            try:
-                                # if count>=90:
-                                #     await txt.edit("sleeping for 30 min.......")
-                                #     await asyncio.sleep(1800)
-                                #     count=0
-                                await txt.edit("sending caption with photo to photo channel")
-                                # if not thumb_id:
-                                #     thumb_id = default_thumbs
-                                media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
-                                if len(media_captions)>1024:
-                                    await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
-                                    media_captions = media_captions[0:1020]
+                            if len(message_ids)<1:
                                 try:
-                                    thumb_path = await Client1.download_media(thumb_id)
-                                    await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                    # if count==1:
-                                    #     thumb_path = await Client1.download_media(thumb_id)
-                                    #     await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                    # if count==2:
-                                    #     async with Client2:
-                                    #         thumb_path = await Client2.download_media(thumb_id)
-                                    #         await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                    # if count==3:
-                                    #     thumb_path = await Client3.download_media(thumb_id)
-                                    #     await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                except Exception as e:
-                                    if "auth.ExportAuthorization" in str(e):
+                                    await txt.edit("Editing Link....")
+                                    try:
+                                        
+                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
+                                        
+                                    except FloodWait as e:
+                                        await asyncio.sleep(e.value)
+                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
+                                        
+                                    try:
+                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                                    except FloodWait as e:
+                                        await asyncio.sleep(e.value)
+                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                                    except Exception as e:
+                                return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
+                            
+                        try:
+                            # if count>=90:
+                            #     await txt.edit("sleeping for 30 min.......")
+                            #     await asyncio.sleep(1800)
+                            #     count=0
+                            await txt.edit("sending caption with photo to photo channel")
+                            # if not thumb_id:
+                            #     thumb_id = default_thumbs
+                            media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
+                            if len(media_captions)>1024:
+                                await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
+                                media_captions = media_captions[0:1020]
+                            try:
+                                thumb_path = await Client1.download_media(thumb_id)
+                                await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                # if count==1:
+                                #     thumb_path = await Client1.download_media(thumb_id)
+                                #     await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                # if count==2:
+                                #     async with Client2:
+                                #         thumb_path = await Client2.download_media(thumb_id)
+                                #         await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                # if count==3:
+                                #     thumb_path = await Client3.download_media(thumb_id)
+                                #     await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                            except Exception as e:
+                                if "auth.ExportAuthorization" in str(e):
+                                    try:
+                                        async with Client2:
+                                            thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,2)
+                                            if thumb_id=="wrong":
+                                                return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                            thumb_path = await Client2.download_media(thumb_id)
+                                            await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                    except Exception as e:
                                         try:
-                                            async with Client2:
-                                                thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,2)
-                                                if thumb_id=="wrong":
-                                                    return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
-                                                thumb_path = await Client2.download_media(thumb_id)
-                                                await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                        except Exception as e:
-                                            try:
-                                                if "auth.ExportAuthorization" in str(e):
-                                                    async with Client3:
-                                                        thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
-                                                        if thumb_id=="wrong":
-                                                            return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
-                                                        thumb_path = await Client3.download_media(thumb_id)
-                                                        await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                                else:
-                                                    return await bot.send_message(update.from_user.id,f"something else with Client2\n{e}\n{traceback.format_exc()}")
-                                            except Exception as e:
-                                                if "auth.ExportAuthorization" in str(e):
-                                                    thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
+                                            if "auth.ExportAuthorization" in str(e):
+                                                async with Client3:
+                                                    thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
                                                     if thumb_id=="wrong":
                                                         return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
-                                                    thumb_path = await Client1.download_media(thumb_id)
-                                                    await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                                else:
-                                                    return await bot.send_message(update.from_user.id,f"something else with Client3\n{e}\n{traceback.format_exc()}")
-                                    else:
-                                        return await bot.send_message(update.from_user.id,f"something else with Client1\n{e}\n{traceback.format_exc()}")
-                                    # if "auth.ExportAuthorization" in str(e):
-                                    #     if count==3:
-                                    #         async with Client1:
-                                    #             thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
-                                    #             if thumb_id=="wrong":
-                                    #                 return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
-                                    #             thumb_path = await Client1.download_media(thumb_id)
-                                    #             await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                    #             count=1
-                                    #     elif count==2:
-                                    #         async with Client3:
-                                    #             thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
-                                    #             if thumb_id=="wrong":
-                                    #                 return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
-                                    #             thumb_path = await Client3.download_media(thumb_id)
-                                    #             await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                    #             count=3
-                                    #     else:
-                                    #         async with Client2:
-                                    #             thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,2)
-                                    #             if thumb_id=="wrong":
-                                    #                 return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
-                                    #             thumb_path = await Client2.download_media(thumb_id)
-                                    #             await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
-                                    #             count=2
-                                    # else:
-                                    #     return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
-                                
-                                #thumb_id=""
-                                success+=1
-                                #count+=1
-                            except Exception as e:
-                                return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}\n{traceback.format_exc()}")
-                    
-                                
-                                
-                                
-                                
-                        else:
-                            return await bot.send_message(update.from_user.id,f"len(message_ids) is less than or equal to  1")
+                                                    thumb_path = await Client3.download_media(thumb_id)
+                                                    await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            else:
+                                                return await bot.send_message(update.from_user.id,f"something else with Client2\n{e}\n{traceback.format_exc()}")
+                                        except Exception as e:
+                                            if "auth.ExportAuthorization" in str(e):
+                                                thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
+                                                if thumb_id=="wrong":
+                                                    return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                                thumb_path = await Client1.download_media(thumb_id)
+                                                await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                            else:
+                                                return await bot.send_message(update.from_user.id,f"something else with Client3\n{e}\n{traceback.format_exc()}")
+                                else:
+                                    return await bot.send_message(update.from_user.id,f"something else with Client1\n{e}\n{traceback.format_exc()}")
+                                # if "auth.ExportAuthorization" in str(e):
+                                #     if count==3:
+                                #         async with Client1:
+                                #             thumb_id,media_caption,message_ids = await batch_thumb_id(Client1,FROM_CHANNEL,message,1)
+                                #             if thumb_id=="wrong":
+                                #                 return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                #             thumb_path = await Client1.download_media(thumb_id)
+                                #             await Client1.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                #             count=1
+                                #     elif count==2:
+                                #         async with Client3:
+                                #             thumb_id,media_caption,message_ids = await batch_thumb_id(Client3,FROM_CHANNEL,message,3)
+                                #             if thumb_id=="wrong":
+                                #                 return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                #             thumb_path = await Client3.download_media(thumb_id)
+                                #             await Client3.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                #             count=3
+                                #     else:
+                                #         async with Client2:
+                                #             thumb_id,media_caption,message_ids = await batch_thumb_id(Client2,FROM_CHANNEL,message,2)
+                                #             if thumb_id=="wrong":
+                                #                 return await bot.send_message(update.from_user.id,f"there are another type of message rather than video,document,audio between given batch links")
+                                #             thumb_path = await Client2.download_media(thumb_id)
+                                #             await Client2.send_photo(int(photo_send_channel),thumb_path,media_captions)
+                                #             count=2
+                                # else:
+                                #     return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel with bots\n{e}\n{traceback.format_exc()}")
+                            
+                            #thumb_id=""
+                            success+=1
+                            #count+=1
+                        except Exception as e:
+                            return await bot.send_message(update.from_user.id,f"something went wrong during send photo with media caption in channel\n{e}\n{traceback.format_exc()}")
+                
+                            
+                            
+                            
+                            
+                        #else:
+                        #    return await bot.send_message(update.from_user.id,f"len(message_ids) is less than or equal to  1")
                 else:
                     
                     unknown_msg_type['total_msg']+1
