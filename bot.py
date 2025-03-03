@@ -572,33 +572,26 @@ async def batch(bot,update):
                                 except FloodWait as e:
                                     await asyncio.sleep(e.value)
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#BaTCh_LInK|{' '.join(str(x) for x in message_ids)}")
-                            
                                 try:
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                                 except FloodWait as e:
                                     await asyncio.sleep(e.value)
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
-                            except Exception as e:
-                                return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
+                        
                             if len(message_ids)<1:
+                                await txt.edit("Editing Link....")
                                 try:
-                                    await txt.edit("Editing Link....")
-                                    try:
-                                        
-                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
-                                        
-                                    except FloodWait as e:
-                                        await asyncio.sleep(e.value)
-                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
-                                        
-                                    try:
-                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
-                                    except FloodWait as e:
-                                        await asyncio.sleep(e.value)
-                                        await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
-                                    except Exception as e:
-                                return await bot.send_message(update.from_user.id,f"something went wrong during edit single_message_text\n{e}")
-                            
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
+                                except FloodWait as e:
+                                    await asyncio.sleep(e.value)
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
+                                try:
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                                except FloodWait as e:
+                                    await asyncio.sleep(e.value)
+                                    await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#PRIVATE_FILE:\n\nGot File Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
+                        except Exception as e:
+                            return await bot.send_message(update.from_user.id,f"something went wrong...\n{e}\n{traceback.format_exc()}")    
                         try:
                             # if count>=90:
                             #     await txt.edit("sleeping for 30 min.......")
