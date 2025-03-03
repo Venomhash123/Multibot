@@ -578,7 +578,7 @@ async def batch(bot,update):
                                     await asyncio.sleep(e.value)
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                         
-                            if len(message_ids)<1:
+                            if len(message_ids)==1:
                                 await txt.edit("Editing Link....")
                                 try:
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
