@@ -273,15 +273,14 @@ async def batch(bot,update):
             channel_posts = AsyncIter(await bot.get_messages(int(f'-100{FROM_CHANNEL}'), total_messages[i:i+200]))
             async for message in channel_posts:
                 msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
-                try:
-                    await txt.edit(msg)
-                except FloodWait as e:
-                    await asyncio.sleep(e.value)
-                    await txt.edit(msg)
+                # try:
+                #     await txt.edit(msg)
+                # except FloodWait as e:
+                #     await asyncio.sleep(e.value)
+                #     await txt.edit(msg)
                     
-                except Exception as e:
-                    pass
-                    #return await bot.send_message(update.from_user.id,f"problem\n{e}\n{str(type(e))}")
+                # except Exception as e:
+                #     return await bot.send_message(update.from_user.id,f"problem\n{e}\n{str(type(e))}")
                     
                     
                 message_ids = []
@@ -356,7 +355,7 @@ async def batch(bot,update):
                             return await bot.send_message(update.from_user.id,f"message_ids list len is zero\n{message.id}")
                         elif len(message_ids)==1:
                             try:
-                                await txt.edit("Editing Link....")
+                                #await txt.edit("Editing Link....")
                                 try:
                                     
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
@@ -378,7 +377,7 @@ async def batch(bot,update):
                                 #     await txt.edit("sleeping for 30 min.......")
                                 #     await asyncio.sleep(1800)
                                 #     count=0
-                                await txt.edit("sending caption with photo to photo channel")
+                                #await txt.edit("sending caption with photo to photo channel")
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
                                     await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
@@ -565,7 +564,7 @@ async def batch(bot,update):
                         #if len(message_ids)>1:
                         try:
                             if len(message_ids)>1:
-                                await txt.edit("Editing Batch Link")
+                                #await txt.edit("Editing Batch Link")
                                 try:
                                     message_ids = sorted(message_ids)
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#BaTCh_LInK|{' '.join(str(x) for x in message_ids)}")
@@ -579,7 +578,7 @@ async def batch(bot,update):
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id+1,f"#BATCH_SAVE:\n\nGot Batch Link!\n\nOpen Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}\n\nwithout shorted Link - https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}")
                         
                             if len(message_ids)==1:
-                                await txt.edit("Editing Link....")
+                                #await txt.edit("Editing Link....")
                                 try:
                                     await bot.edit_message_text(int(f'-100{FROM_CHANNEL}'),message.id,f"#SiNGle_LInk|{message_ids[0]}")
                                 except FloodWait as e:
@@ -597,7 +596,7 @@ async def batch(bot,update):
                             #     await txt.edit("sleeping for 30 min.......")
                             #     await asyncio.sleep(1800)
                             #     count=0
-                            await txt.edit("sending caption with photo to photo channel")
+                            #await txt.edit("sending caption with photo to photo channel")
                             # if not thumb_id:
                             #     thumb_id = default_thumbs
                             media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
@@ -693,17 +692,19 @@ async def batch(bot,update):
                     unknown_msg_type['total_msg']+1
                     unknown_msg_type['msg_ids'].append(message.id)
                     continue
-                # if total % 5 ==0:
-                #     msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
+                if total % 10 ==0:
+                    msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
                     
-                #     try:
-                #         await txt.edit(msg)
-                #     except FloodWait as e:
-                #         await asyncio.sleep(e.value)
-                #         await txt.edit(msg)
+                    try:
+                        await txt.edit(msg)
+                    except FloodWait as e:
+                        msges=await bot.send_message(update.from_user.id,f"sleeping for {e.value} sec.")
+                        await asyncio.sleep(e.value)
+                        await msges.delete()
+                        await txt.edit(msg)
                     
-                #     except Exception as e:
-                #         return await bot.send_message(update.from_user.id,f"problem editing txt while totaling\n{e}")
+                    except Exception as e:
+                        return await bot.send_message(update.from_user.id,f"problem-\n{e}\n&{traceback.format_exc()}")
                 
     
     
