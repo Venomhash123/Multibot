@@ -380,7 +380,7 @@ async def batch(bot,update):
                                 #await txt.edit("sending caption with photo to photo channel")
                                 media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                                 if len(media_captions)>1024:
-                                    await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
+                                    #await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                     media_captions = media_captions[0:1020]
                                 try:
                                     thumb_id = await single_link_thumb(Client1,FROM_CHANNEL,message,1)
@@ -601,7 +601,7 @@ async def batch(bot,update):
                             #     thumb_id = default_thumbs
                             media_captions=f"Here is the Permanent Link of your Content: <a href=https://t.me/moviexstore_bot?start=store_{FROM_CHANNEL}_{str_to_b64(str(message.id))}>Download Link</a>\n\nJust Click on download to get your Content!\n\nyour Content name are:👇\n\n{media_caption}\n\n{add_detail}"
                             if len(media_captions)>1024:
-                                await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
+                                #await txt.edit("**media caption is too long (more than 1024 character)\nAdding only 1024 character caption to your media photo...**")
                                 media_captions = media_captions[0:1020]
                             try:
                                 thumb_path = await Client1.download_media(thumb_id)
@@ -692,7 +692,7 @@ async def batch(bot,update):
                     unknown_msg_type['total_msg']+1
                     unknown_msg_type['msg_ids'].append(message.id)
                     continue
-                if total % 10 ==0:
+                if total % 5 ==0:
                     msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
                     
                     try:
@@ -709,7 +709,7 @@ async def batch(bot,update):
     
     
     except Exception as e:
-        await bot.send_message(update.from_user.id,f"i don't  know whats is wrong\n{e}")
+        await bot.send_message(update.from_user.id,f"i don't  know whats is wrong\n{e}\n{traceback.format_exc()}")
 
 
     finally:
