@@ -272,15 +272,22 @@ async def batch(bot,update):
         for i in range(FROM_MSG_ID-1 ,len(total_messages), 200):
             channel_posts = AsyncIter(await bot.get_messages(int(f'-100{FROM_CHANNEL}'), total_messages[i:i+200]))
             async for message in channel_posts:
-                msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
-                # try:
-                #     await txt.edit(msg)
-                # except FloodWait as e:
-                #     await asyncio.sleep(e.value)
-                #     await txt.edit(msg)
+                if total % 5 ==0:
+                    msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
                     
-                # except Exception as e:
-                #     return await bot.send_message(update.from_user.id,f"problem\n{e}\n{str(type(e))}")
+                    try:
+                        await txt.edit(msg)
+                    except FloodWait as e:
+                        msges=await bot.send_message(update.from_user.id,f"sleeping for {e.value} sec.")
+                        await asyncio.sleep(e.value)
+                        await msges.delete()
+                        await txt.edit(msg)
+                    
+                    except Exception as e:
+                        if "tried to edit it using the same content" in str(e):
+                            pass
+                        else:
+                            return await bot.send_message(update.from_user.id,f"problem-\n{e}\n&{traceback.format_exc()}")
                     
                     
                 message_ids = []
@@ -692,19 +699,19 @@ async def batch(bot,update):
                     unknown_msg_type['total_msg']+1
                     unknown_msg_type['msg_ids'].append(message.id)
                     continue
-                if total % 5 ==0:
-                    msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
+                # if total % 5 ==0:
+                #     msg = f"batch editing in process!\ntotal : {total}\nunknown_msg_type : {unknown_msg_type}\nempty : {empty}\nvid_doc_aud_msg : {vid_doc_aud_msg}\nsuccess : {success}"
                     
-                    try:
-                        await txt.edit(msg)
-                    except FloodWait as e:
-                        msges=await bot.send_message(update.from_user.id,f"sleeping for {e.value} sec.")
-                        await asyncio.sleep(e.value)
-                        await msges.delete()
-                        await txt.edit(msg)
+                #     try:
+                #         await txt.edit(msg)
+                #     except FloodWait as e:
+                #         msges=await bot.send_message(update.from_user.id,f"sleeping for {e.value} sec.")
+                #         await asyncio.sleep(e.value)
+                #         await msges.delete()
+                #         await txt.edit(msg)
                     
-                    except Exception as e:
-                        return await bot.send_message(update.from_user.id,f"problem-\n{e}\n&{traceback.format_exc()}")
+                #     except Exception as e:
+                #         return await bot.send_message(update.from_user.id,f"problem-\n{e}\n&{traceback.format_exc()}")
                 
     
     
